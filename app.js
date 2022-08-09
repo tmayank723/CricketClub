@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
+const dotenv = require('dotenv');
+dotenv.config({ path: ('./.env') });
 
 // Database configuration
 const connect = require('./DBConnect/db');
@@ -9,7 +11,7 @@ const routes = require('./routes/route');
 app.use('/',routes)
 
 
-app.listen(3000, async () => {
+app.listen(process.env.PORT, async () => {
     await connect.dbConnect()
-    console.log("Server is Running on port : 3000");
+    console.log(`Server is Running at ${process.env.PORT}`);
 });

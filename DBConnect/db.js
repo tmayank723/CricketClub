@@ -1,10 +1,10 @@
 const { MongoClient } = require("mongodb");
 
-const url = "mongodb+srv://CricketClub:CricketClub@cluster0.x8ntg.mongodb.net/?retryWrites=true&w=majority"
+const url = process.env.DB_URL;
 const client = new MongoClient(url);
 
 // Database Name
-const dbName = "CricketClub";
+const dbName = process.env.DB_NAME;
 let db;
 
 async function main() {

@@ -1,13 +1,15 @@
 const Joi = require('joi');
 const scheduleMatchSchema = async(req, res, next) => { 
     const schema = Joi.object({
-        teams: Joi.array().items(Joi.string().required()).unique().default([]),
+        team1: Joi.string().required(),
+        team2: Joi.string().required(),
+        team1Score: Joi.number().default(0),
+        team2Score: Joi.number().default(0),
         venue: Joi.string().required(),
         match_date: Joi.date().required(),
         start_time: Joi.string().required(),
-        end_time : Joi.string().required(),
         type: Joi.string().valid('Domestic', 'International').required(),
-        score: Joi.number().optional().default(0),
+        winningTeam: Joi.string().default(null),
     });
     const value = await schema.validate(req.body);
     if (value.error) {

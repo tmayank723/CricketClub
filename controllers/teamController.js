@@ -39,10 +39,20 @@ const deleteTeam = async (req, res) => {
     }
 }
 
+const typeFilter = async (req, res) => {
+    try {
+        const type = req.query.type;
+        const team = await Team.typeFilter(type);
+        res.status(200).send(team);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports = {
     createTeam,
     getTeam,
     updateTeam,
-    deleteTeam
+    deleteTeam,
+    typeFilter
 }

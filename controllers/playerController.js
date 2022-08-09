@@ -58,21 +58,12 @@ const filter = async (req, res) => {
     }
 }
 
-const getPlayerMatchHistory = async (req, res) => {
-    try {
-        const playerId = new ObjectId(req.params.id);
-        const data = await Team.getPlayerMatchHistory(playerId);
-        res.status(200).send(data);
-    } catch (error) {
-        console.log(error);
-    }
-}
+
 
 module.exports = {
     createPlayer,
     getPlayer,
     updatePlayer,
     deletePlayer,
-    filter,
-    getPlayerMatchHistory
+    filter
 }

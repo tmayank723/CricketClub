@@ -14,6 +14,11 @@ const updateTeam = async (id, data) => {
 const deleteTeam = async (id) => {
   return db.get().collection("teams").deleteOne({ _id: id });
 };
+const typeFilter = async (type) => {
+  let condition = []
+  if(type) condition.push({ $match: { type: type } })
+  return db.get().collection("teams").aggregate(condition).toArray();
+}
 
 // Player Crud Operation
 const createPlayer = async (data) => {
@@ -43,40 +48,19 @@ const createScheduleMatch = async (data) => {
 const getScheduleMatches = async () => {
   return db.get().collection("schedule_matches").find({}).toArray();
 }
-const updateScoreWithMatchId = async (matchId, runs) => {
-  return db.get().collection("schedule_matches").updateOne({ _id: matchId }, {$inc: { score: runs }});
-}
-const updateScoreWithPlayerId = async (playerId, matchId, runs) => {
-  return db.get().collection("players").updateOne({ _id: playerId }, { $set: { match_id: matchId, player_score: runs} });
-}
-const getPlayerMatchHistory = async (playerId) => {
-  return db.get().collection("players").aggregate([
-    { $match: { _id: playerId } },
-    { $lookup: { from: "schedule_matches", localField: "match_id", foreignField: "_id", as: "playerHistory" } },
-  ]).toArray();
-}
-const getAllMatch = async (type, venue, date) => {
-  let cond = [];
-  if(type) cond.push({ $match: { type: type } });
-  if(venue) cond.push({ $match: { venue: venue } });
-  if(type) cond.push({ $match: { match_date: date } });
-  return db.get().collection("schedule_matches").aggregate(cond).toArray();
-}
 
 module.exports = {
   createTeam,
   getTeam,
   updateTeam,
   deleteTeam,
+  typeFilter,
   createPlayer,
   getPlayer,
   updatePlayer,
   deletePlayer,
   filter,
   createScheduleMatch,
-  getScheduleMatches,
-  updateScoreWithMatchId,
-  updateScoreWithPlayerId,
-  getPlayerMatchHistory,
-  getAllMatch
+  getScheduleMatches
 };
+
