@@ -11,8 +11,49 @@ const updateScore = require('../middleware/updateScore');
 const userSchema = require('../middleware/user');
 const loginMiddleware = require('../middleware/login');
 
+// Create Swagger
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+          title: 'Swagger for Cricket Club Task',
+          version: '1.0.0',
+        },
+        components: {
+            securitySchemes: {
+                ApiKeyAuth: {
+                    type: 'apiKey',
+                    in: 'header',
+                    name: 'access-token',
+                    description: "The token for authentication"
+                },
+            },
+        }
+    },
+    apis: ['./routes/route*.js'],
+}
+const swaggerDocument = swaggerJSDoc(options);
+
+// Swagger Open Doc API URL
+router.use('/swaggerDoc', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+
+// Swagger Documentation
+/**
+ * @swagger
+ * /:
+ *  get:
+ *      summary: This API is used to Get all the Teams Records
+ *      security: 
+ *          - ApiKeyAuth: []
+ *      responses:
+ *          200:
+ *              description: To Test get Method
+ */
+
 // Team Routes
-router.get('/', loginMiddleware.verifyToken, teamController.getTeam);
+router.get('/',loginMiddleware.verifyToken, teamController.getTeam);
 router.post('/createTeam', loginMiddleware.verifyToken, teamMiddleware, teamController.createTeam);
 router.patch('/updateTeam/:id', loginMiddleware.verifyToken, teamController.updateTeam);
 router.delete('/deleteTeam/:id', loginMiddleware.verifyToken, teamController.deleteTeam);
