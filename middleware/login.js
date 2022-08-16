@@ -13,8 +13,9 @@ const loginSchema = async(req, res, next) => {
                 status: 400,
                 message: value.error.details[0].message
             })
+        } else {
+            next()
         } 
-        next();
     } catch (error) {
         console.log(error);
     }
